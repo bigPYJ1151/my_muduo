@@ -3,6 +3,8 @@ set(
     base_srcs
 
     Timestamp.cc
+    CurrentThread.cc
+    Exception.cc
 )
 
 add_library(muduo_base ${base_srcs})
