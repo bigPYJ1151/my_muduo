@@ -5,6 +5,9 @@ set(
     Timestamp.cc
     CurrentThread.cc
     Exception.cc
+    Condition.cc
+    CountDownLatch.cc
+    Thread.cc
 )
 
 add_library(muduo_base ${base_srcs})

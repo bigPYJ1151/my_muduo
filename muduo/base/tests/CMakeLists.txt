@@ -9,3 +9,12 @@ add_test(NAME exception_test COMMAND exception_test)
 
 add_executable(atomic_unittest Atomic_unittest.cc)
 add_test(NAME atomic_unittest COMMAND atomic_unittest)
+
+add_executable(mutex_test Mutex_test.cc)
+target_link_libraries(mutex_test muduo_base)
+
+add_executable(thread_bench Thread_bench.cc)
+target_link_libraries(thread_bench muduo_base)
+
+add_executable(thread_test Thread_test.cc)
+target_link_libraries(thread_test muduo_base)
