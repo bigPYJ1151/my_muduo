@@ -27,3 +27,15 @@ target_link_libraries(blockingqueue_bench muduo_base)
 
 add_executable(boundedblockingqueue_test BoundedBlockingQueue_test.cc)
 target_link_libraries(boundedblockingqueue_test muduo_base)
+
+add_executable(singleton_test Singleton_test.cc)
+target_link_libraries(singleton_test muduo_base)
+
+add_executable(singleton_threadlocal_test SingletonThreadLocal_test.cc)
+target_link_libraries(singleton_threadlocal_test muduo_base)
+
+add_executable(threadlocal_test ThreadLocal_test.cc)
+target_link_libraries(threadlocal_test muduo_base)
+
+add_executable(threadlocalsingleton_test ThreadLocalSingleton_test.cc)
+target_link_libraries(threadlocalsingleton_test muduo_base)
