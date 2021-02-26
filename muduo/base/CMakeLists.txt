@@ -10,6 +10,14 @@ set(
     Condition.cc
     CountDownLatch.cc
     Thread.cc
+    ThreadPool.cc
+    Logging.cc 
+    LogStream.cc 
+    FileUtil.cc
+    ProcessInfo.cc
+    LogFile.cc
+    Logging.cc 
+    LogStream.cc 
 )
 
 add_library(muduo_base ${base_srcs})
