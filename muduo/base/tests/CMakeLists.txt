@@ -60,3 +60,8 @@ target_link_libraries(logging_test muduo_base)
 add_executable(logstream_bench LogStream_bench.cc)
 target_link_libraries(logstream_bench muduo_base)
 
+add_executable(fork_test Fork_test.cc)
+target_link_libraries(fork_test muduo_base)
+
+add_executable(threadpool_test ThreadPool_test.cc)
+target_link_libraries(threadpool_test muduo_base)
