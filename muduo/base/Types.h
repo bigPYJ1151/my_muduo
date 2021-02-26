@@ -10,11 +10,16 @@
 #endif
 
 namespace muduo {
-    using std::string;
+using std::string;
 
-    inline void memZero(void* ptr, size_t n) {
-        memset(ptr, 0, n);
-    }
+inline void memZero(void* ptr, size_t n) {
+    memset(ptr, 0, n);
+}
+
+template <typename To, typename From>
+inline To implicit_cast(From const & f) {
+    return f;
+}
 }
 
 #endif

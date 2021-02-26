@@ -34,8 +34,16 @@ target_link_libraries(singleton_test muduo_base)
 add_executable(singleton_threadlocal_test SingletonThreadLocal_test.cc)
 target_link_libraries(singleton_threadlocal_test muduo_base)
 
+add_executable(date_unittest Date_unittest.cc)
+target_link_libraries(date_unittest muduo_base)
+add_test(NAME date_unittest COMMAND date_unittest)
+
 add_executable(threadlocal_test ThreadLocal_test.cc)
 target_link_libraries(threadlocal_test muduo_base)
 
 add_executable(threadlocalsingleton_test ThreadLocalSingleton_test.cc)
 target_link_libraries(threadlocalsingleton_test muduo_base)
+
+add_executable(timezone_unittest TimeZone_unittest.cc)
+target_link_libraries(timezone_unittest muduo_base)
+add_test(NAME timezone_unittest COMMAND timezone_unittest)
