@@ -6,6 +6,7 @@
 #include <muduo/net/Channel.h>
 #include <muduo/net/Poller.h>
 #include <muduo/net/SocketsOps.h>
+#include <muduo/net/TimerQueue.h>
 
 #include <algorithm>
 
@@ -55,6 +56,7 @@ EventLoop::EventLoop() :
     _iteration(0),
     _thread_id(CurrentThread::tid()),
     _poller(Poller::newDefaultPoller(this)),
+    _timer_queue(new TimerQueue(this)),
     _wake_up_fd(createEventfd()),
     _wake_up_channel(new Channel(this, _wake_up_fd)),
     _current_active_channel(NULL)
@@ -140,6 +142,25 @@ void EventLoop::queueInloop(Functor cb) {
 size_t EventLoop::queueSize() const {
     MutexLockGuard lock(_mutex);
     return _pending_functors.size();
+}
+
+// Timer functions
+TimerId EventLoop::runAt(Timestamp time, TimerCallback cb) {
+    return _timer_queue->addTimer(std::move(cb), time, 0.0);
+}
+
+TimerId EventLoop::runAfter(double delay, TimerCallback cb) {
+    Timestamp time(addTime(Timestamp::now(), delay));
+    return runAt(time, std::move(cb));
+}
+
+TimerId EventLoop::runEvery(double interval, TimerCallback cb) {
+    Timestamp time(addTime(Timestamp::now(), interval));
+    return _timer_queue->addTimer(std::move(cb), time, interval);
+}
+
+void EventLoop::cancel(TimerId timer_id) {
+    return _timer_queue->cancel(timer_id);
 }
 
 // Channel functions

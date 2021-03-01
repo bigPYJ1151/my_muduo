@@ -10,12 +10,14 @@
 #include <muduo/base/CurrentThread.h>
 #include <muduo/base/Timestamp.h>
 #include <muduo/net/Callbacks.h>
+#include <muduo/net/TimerId.h>
 
 namespace muduo {
 namespace net {
 
 class Channel;
 class Poller;
+class TimerQueue;
 
 class EventLoop : noncopyable {
 public:
@@ -50,6 +52,23 @@ public:
     void queueInloop(Functor cb);
 
     size_t queueSize() const;
+
+    /*******************Timers***************************/
+    // Runs callback at 'time'
+    // Safe to call from other threads
+    TimerId runAt(Timestamp time, TimerCallback cb);
+
+    // Runs callback after delay seconds
+    // Safe to call from other threads
+    TimerId runAfter(double delay, TimerCallback cb);
+
+    // Runs callback every interval seconds
+    // Safe to call from other threads
+    TimerId runEvery(double interval, TimerCallback cb);
+
+    // Cancel the timer
+    // Safe to call from other threads
+    void cancel(TimerId timer_id);
 
     // Internal usage
     void wakeup();
@@ -103,6 +122,7 @@ private:
     const pid_t _thread_id;
     Timestamp _poll_return_time;
     std::unique_ptr<Poller> _poller;
+    std::unique_ptr<TimerQueue> _timer_queue;
     int _wake_up_fd;
 
     std::unique_ptr<Channel> _wake_up_channel;

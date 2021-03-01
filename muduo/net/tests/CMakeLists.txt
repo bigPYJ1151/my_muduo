@@ -1,3 +1,9 @@
 
 add_executable(event_loop_unittest1 EventLoop_unittest1.cc)
 target_link_libraries(event_loop_unittest1 muduo_net)
+
+add_executable(channel_test Channel_test.cc)
+target_link_libraries(channel_test muduo_net)
+
+add_executable(eventloop_unittest EventLoop_unittest.cc)
+target_link_libraries(eventloop_unittest muduo_net)
