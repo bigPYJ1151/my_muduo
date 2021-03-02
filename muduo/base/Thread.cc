@@ -2,6 +2,7 @@
 #include <muduo/base/Thread.h>
 #include <muduo/base/CurrentThread.h>
 #include <muduo/base/Exception.h>
+#include <muduo/base/Logging.h>
 
 #include <type_traits>
 
@@ -105,10 +106,12 @@ bool CurrentThread::isMainThread() {
     return tid() == ::getpid();
 }
 
-// void CurrentThread::sleepUsec(int64_t usec) {
-//     struct timespec ts = {0, 0};
-//     ts.tv_sec = static_cast<time_t>(usec / )
-// }
+void CurrentThread::sleepUsec(int64_t usec) {
+    struct timespec ts = {0, 0};
+    ts.tv_sec = static_cast<time_t>(usec / Timestamp::kMicroSecondsPerSecond);
+    ts.tv_nsec = static_cast<long>(usec % Timestamp::kMicroSecondsPerSecond * 1000);
+    ::nanosleep(&ts, NULL);
+}
 
 AtomicInt32 Thread::_num_created;
 
@@ -145,7 +148,7 @@ void Thread::start() {
     if (pthread_create(&_pthread_id, NULL, &detial::startThread, data)) {
         _started = false;
         delete data;
-        // TODO: logging
+        LOG_SYSFATAL << "Failed in pthread_create";
     }
     else {
         _latch.wait();

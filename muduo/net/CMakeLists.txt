@@ -15,6 +15,8 @@ set(net_SRCS
     poller/PollPoller.cc 
     Timer.cc 
     TimerQueue.cc 
+    EventLoopThread.cc 
+    EventLoopThreadPool.cc
 )
 
 add_library(muduo_net ${net_SRCS})
