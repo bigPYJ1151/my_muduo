@@ -102,7 +102,7 @@ inline Logger::LogLevel Logger::logLevel() {
 const char* strerror_tl(int saved_errno);
 
 #define CHECK_NOTNULL(val)\
-    ::muduo::CheckNotNull(__File__, __LINE__, "'" #val "' Must be not NULL", (val));
+    ::muduo::CheckNotNull(__FILE__, __LINE__, "'" #val "' Must be not NULL", (val))
 
 template <typename T>
 T* CheckNotNull(Logger::SourceFile file, int line, const char* names, T* ptr) {
