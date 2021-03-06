@@ -17,6 +17,12 @@ set(net_SRCS
     TimerQueue.cc 
     EventLoopThread.cc 
     EventLoopThreadPool.cc
+    Acceptor.cc 
+    Buffer.cc 
+    InetAddress.cc 
+    Socket.cc 
+    TcpConnection.cc 
+    TcpServer.cc 
 )
 
 add_library(muduo_net ${net_SRCS})

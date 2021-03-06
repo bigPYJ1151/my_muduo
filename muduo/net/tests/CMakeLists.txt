@@ -13,3 +13,10 @@ target_link_libraries(eventloopthread_unittest muduo_net)
 
 add_executable(eventloopthreadpool_unittest EventLoopThreadPool_unittest.cc)
 target_link_libraries(eventloopthreadpool_unittest muduo_net)
+
+add_executable(timerqueue_unittest TimerQueue_unittest.cc)
+target_link_libraries(timerqueue_unittest muduo_net)
+add_test(NAME timerqueue_unittest COMMAND timerqueue_unittest)
+
+add_executable(echoserver_unittest EchoServer_unittest.cc)
+target_link_libraries(echoserver_unittest muduo_net)
