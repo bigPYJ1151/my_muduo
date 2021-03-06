@@ -28,6 +28,9 @@ target_link_libraries(blockingqueue_bench muduo_base)
 add_executable(boundedblockingqueue_test BoundedBlockingQueue_test.cc)
 target_link_libraries(boundedblockingqueue_test muduo_base)
 
+add_executable(boundedblockingqueue_std_test BoundedBlockingQueue_std_test.cc)
+target_link_libraries(boundedblockingqueue_std_test muduo_base)
+
 add_executable(singleton_test Singleton_test.cc)
 target_link_libraries(singleton_test muduo_base)
 
@@ -47,6 +50,9 @@ add_test(NAME timezone_unittest COMMAND timezone_unittest)
 add_executable(fileutil_test FileUtil_test.cc)
 target_link_libraries(fileutil_test muduo_base)
 add_test(NAME fileutil_test COMMAND fileutil_test)
+
+add_executable(epoll_cocurr_test Epoll_cocurr_test.cc)
+target_link_libraries(epoll_cocurr_test muduo_base)
 
 add_executable(processinfo_test ProcessInfo_test.cc)
 target_link_libraries(processinfo_test muduo_base)
