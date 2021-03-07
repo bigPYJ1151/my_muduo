@@ -23,6 +23,8 @@ set(net_SRCS
     Socket.cc 
     TcpConnection.cc 
     TcpServer.cc 
+    TcpClient.cc 
+    Connector.cc 
 )
 
 add_library(muduo_net ${net_SRCS})
