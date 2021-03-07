@@ -71,7 +71,6 @@ class Test
     {
       std::string d(queue_.take());
       printf("tid=%d, get data = %s, size = %zd\n", muduo::CurrentThread::tid(), d.c_str(), queue_.size());
-      sleep(1);
       running = (d != "stop");
     }
 
@@ -88,7 +87,7 @@ class Test
 int main()
 {
   printf("pid=%d, tid=%d\n", ::getpid(), muduo::CurrentThread::tid());
-  Test t(2);
+  Test t(5);
   t.run(100);
   t.joinAll();
 

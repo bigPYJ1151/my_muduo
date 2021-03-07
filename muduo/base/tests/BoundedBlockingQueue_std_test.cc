@@ -71,7 +71,7 @@ class Test
     {
       std::string d(queue_.take());
       printf("tid=%d, get data = %s, size = %zd\n", muduo::CurrentThread::tid(), d.c_str(), queue_.size());
-      sleep(1);
+      // sleep(1);
       running = (d != "stop");
     }
 
