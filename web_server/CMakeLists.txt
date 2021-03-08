@@ -3,6 +3,7 @@ set(
     web_server_srcs
 
     ContextParse.cc 
+    Response.cc 
 )
 
 add_executable(web_server ${web_server_srcs})
