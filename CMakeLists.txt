@@ -104,6 +104,7 @@ message(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_T
 
 add_subdirectory(muduo/base)
 add_subdirectory(muduo/net)
+add_subdirectory(web_server)
 
 if(MUDUO_BUILD_EXAMPLES)
   add_subdirectory(contrib)
