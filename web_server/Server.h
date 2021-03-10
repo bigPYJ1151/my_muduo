@@ -5,8 +5,11 @@
 #include <muduo/net/TcpServer.h>
 #include <web_server/Request.h>
 #include <web_server/Response.h>
+#include <web_server/TimeWheel.h>
+#include <web_server/ContextParse.h>
 
 using namespace muduo::net;
+typedef std::pair<ContextParse, weakTimeWheelEntryPtr> ContextType;
 
 class Server {
 public:
@@ -39,6 +42,7 @@ private:
 
     TcpServer server_;
     HttpCallback http_callback_;
+    TimerWheel timer_;
 };
 
 

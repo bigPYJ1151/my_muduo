@@ -1,6 +1,5 @@
 
 #include <web_server/Server.h>
-#include <web_server/ContextParse.h>
 #include <muduo/base/Logging.h>
 
 void HttpRequest(const Request& req, Response* resp) {
@@ -40,7 +39,8 @@ Server::Server(EventLoop* loop,
                 const std::string& name,
                 TcpServer::Option option) :
                 server_(loop, listen_addr, name, option),
-                http_callback_(HttpRequest)
+                http_callback_(HttpRequest),
+                timer_(5, loop)
                  {
     server_.setConnectionCallback(
         std::bind(&Server::onConnection, this, muduo::_1)
@@ -52,13 +52,15 @@ Server::Server(EventLoop* loop,
 
 void Server::onConnection(const TcpConnectionPtr& conn) {
     if (conn->connected()) {
-        conn->setContext(ContextParse());
+        TimeWheelEntryPtr context = std::make_shared<TimeWheelEntry>(conn);
+        timer_.insertEntry(context);
+        conn->setContext(ContextType(ContextParse(), std::weak_ptr(context)));
     }
 }
 
 void Server::onMessage(const TcpConnectionPtr& conn, Buffer* buf, Timestamp receive_time) {
-    ContextParse* context = std::any_cast<ContextParse>(conn->getMutableContext());
-
+    ContextType* context_pair = std::any_cast<ContextType>(conn->getMutableContext());
+    ContextParse* context = &(context_pair->first);
     if (!context->parseRequest(buf, receive_time)) {
         conn->send("HTTP/1.1 400 Bad Request\r\n\r\n");
         conn->shutdown();
@@ -80,6 +82,13 @@ void Server::onRequest(const TcpConnectionPtr& conn, const Request& req) {
     conn->send(&buf);
     if (response.closeConnection()) {
         conn->shutdown();
+    }
+    else {
+        ContextType* context_pair = std::any_cast<ContextType>(conn->getMutableContext());
+        weakTimeWheelEntryPtr* context = &(context_pair->second);
+        if (context->lock()) {
+            timer_.insertEntry(context->lock());
+        }
     }
 }
 
