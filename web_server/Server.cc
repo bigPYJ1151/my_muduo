@@ -2,6 +2,8 @@
 #include <web_server/Server.h>
 #include <muduo/base/Logging.h>
 
+static std::vector<unsigned char> image_;
+
 void HttpRequest(const Request& req, Response* resp) {
     LOG_TRACE << "Headers " << req.methodString() << " " << req.path(); 
     LOG_INFO << req.path();
@@ -17,8 +19,13 @@ void HttpRequest(const Request& req, Response* resp) {
         "</body></html>"
         );
     }
-    else if (req.path() == "/image.png") {
-
+    else if (req.path() == "/image.jpg") {
+        resp->setStatusCode(Response::S200Ok);
+        resp->setStatusMessage("OK");
+        resp->setContentType("image/jpg");
+        resp->addHeader("Server", "Naive Server");
+        std::string now = muduo::Timestamp::now().toFormattedString();
+        resp->setBody(image_);
     }
     else if (req.path() == "/hello") {
         resp->setStatusCode(Response::S200Ok);
@@ -38,6 +45,7 @@ Server::Server(EventLoop* loop,
                 const InetAddress& listen_addr,
                 const std::string& name,
                 bool use_timer,
+                std::string image_path,
                 TcpServer::Option option
                 ) :
                 server_(loop, listen_addr, name, option),
@@ -54,6 +62,21 @@ Server::Server(EventLoop* loop,
 
     if (use_timer_) {
         timer_.start();
+    }
+
+    if (!image_path.empty()) {
+        FILE* fp = nullptr;
+        fp = fopen(image_path.c_str(), "rb");
+        assert(fp != nullptr);
+
+        fseek(fp, 0, SEEK_END);
+        long int file_len = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+        
+        image_.resize(file_len);
+
+        fread(image_.data(), 1, file_len, fp);
+        fclose(fp);
     }
 }
 

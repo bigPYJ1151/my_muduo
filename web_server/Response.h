@@ -46,6 +46,11 @@ public:
         body_ = body;
     }
 
+    void setBody(const std::vector<unsigned char>& body) {
+        body_.resize(body.size());
+        std::copy(body.begin(), body.end(), body_.begin());
+    }
+
     void appendToBuffer(Buffer* output) const;
 
 private:

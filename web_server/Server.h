@@ -20,6 +20,7 @@ public:
             const InetAddress& listen_addr,
             const std::string& name,
             bool use_timer,
+            std::string image_path = "",
             TcpServer::Option option = TcpServer::kNoReusePort
             );
     
