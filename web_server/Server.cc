@@ -75,7 +75,9 @@ Server::Server(EventLoop* loop,
         
         image_.resize(file_len);
 
-        fread(image_.data(), 1, file_len, fp);
+        size_t read_num = fread(image_.data(), 1, file_len, fp);
+        assert(read_num == static_cast<size_t>(file_len));
+        (void) read_num;
         fclose(fp);
     }
 }
