@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
         num_threads = atoi(argv[1]);
     }
     muduo::net::EventLoop loop;
-    Server server(&loop, InetAddress(8000), "Naive Server");
+    Server server(&loop, InetAddress(8000), "Naive Server", false);
     server.setThreadNum(num_threads);
     server.start();
     loop.loop();

@@ -19,7 +19,9 @@ public:
     Server(EventLoop* loop,
             const InetAddress& listen_addr,
             const std::string& name,
-            TcpServer::Option option = TcpServer::kNoReusePort);
+            bool use_timer,
+            TcpServer::Option option = TcpServer::kNoReusePort
+            );
     
     EventLoop* getLoop() const {
         return server_.getLoop();
@@ -43,6 +45,7 @@ private:
     TcpServer server_;
     HttpCallback http_callback_;
     TimerWheel timer_;
+    bool use_timer_;
 };
 
 

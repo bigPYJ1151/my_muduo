@@ -37,10 +37,13 @@ void HttpRequest(const Request& req, Response* resp) {
 Server::Server(EventLoop* loop,
                 const InetAddress& listen_addr,
                 const std::string& name,
-                TcpServer::Option option) :
+                bool use_timer,
+                TcpServer::Option option
+                ) :
                 server_(loop, listen_addr, name, option),
                 http_callback_(HttpRequest),
-                timer_(5, loop)
+                timer_(5, loop),
+                use_timer_(use_timer)
                  {
     server_.setConnectionCallback(
         std::bind(&Server::onConnection, this, muduo::_1)
@@ -48,12 +51,19 @@ Server::Server(EventLoop* loop,
     server_.setMessageCallback(
         std::bind(&Server::onMessage, this, muduo::_1, muduo::_2, muduo::_3)
     );
+
+    if (use_timer_) {
+        timer_.start();
+    }
 }
 
 void Server::onConnection(const TcpConnectionPtr& conn) {
     if (conn->connected()) {
-        TimeWheelEntryPtr context = std::make_shared<TimeWheelEntry>(conn);
-        timer_.insertEntry(context);
+        TimeWheelEntryPtr context;
+        if (use_timer_) {
+            context = std::make_shared<TimeWheelEntry>(conn);
+            timer_.insertEntry(context);
+        }
         conn->setContext(ContextType(ContextParse(), std::weak_ptr(context)));
     }
 }
@@ -83,7 +93,7 @@ void Server::onRequest(const TcpConnectionPtr& conn, const Request& req) {
     if (response.closeConnection()) {
         conn->shutdown();
     }
-    else {
+    else if (use_timer_) { 
         ContextType* context_pair = std::any_cast<ContextType>(conn->getMutableContext());
         weakTimeWheelEntryPtr* context = &(context_pair->second);
         if (context->lock()) {

@@ -35,6 +35,14 @@ public:
 
     void onTimer();
 
+    void start();
+
+    void stop();
+
+    bool isRunning() {
+        return run_;
+    }
+
     void insertEntry(TimeWheelEntryPtr entry);    
 
 private:
@@ -50,6 +58,7 @@ private:
     std::vector<std::vector<TimeWheelEntryPtr>> wheel_;
     EventLoop* loop_;
     TimerId id_;
+    bool run_;
 };
 
 #endif
