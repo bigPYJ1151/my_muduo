@@ -14,8 +14,8 @@ void HttpRequest(const Request& req, Response* resp) {
         resp->addHeader("Server", "Naive Server");
         std::string now = muduo::Timestamp::now().toFormattedString();
         resp->setBody(
-        "<html><head><title>This is title</title></head>"
-        "<body><h1>Hello</h1>Now is " + now +
+        "<html><head><title>This is a test page for Naive Server</title></head>"
+        "<body><h1>Welcome to Naive Server</h1>Now is " + now + "<img src=\"http://192.168.3.148:8000/image.jpg\">"
         "</body></html>"
         );
     }
@@ -50,7 +50,7 @@ Server::Server(EventLoop* loop,
                 ) :
                 server_(loop, listen_addr, name, option),
                 http_callback_(HttpRequest),
-                timer_(8, loop),
+                timer_(10, loop),
                 use_timer_(use_timer)
                  {
     server_.setConnectionCallback(
