@@ -50,7 +50,7 @@ Server::Server(EventLoop* loop,
                 ) :
                 server_(loop, listen_addr, name, option),
                 http_callback_(HttpRequest),
-                timer_(5, loop),
+                timer_(8, loop),
                 use_timer_(use_timer)
                  {
     server_.setConnectionCallback(

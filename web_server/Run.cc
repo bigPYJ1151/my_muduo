@@ -16,6 +16,9 @@ int main(int argc, char* argv[]) {
     }
     
     LOG_INFO << "Num threads: " << num_threads << " Timer: " << use_timer; 
+#ifdef NDEBUG
+    muduo::Logger::setLogLevel(muduo::Logger::WARN);
+#endif
     std::string image_path;
     image_path += "./image.jpg";
 
